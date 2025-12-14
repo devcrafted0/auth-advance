@@ -10,7 +10,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       async authorize(credentials) {
-        console.log("recived credentials", credentials);
         const validatedFields = LoginSchema.safeParse(credentials);
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
@@ -18,7 +17,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!user || !user.password) return null;
 
           const passwordMatch = await bcrypt.compare(password, user.password);
-          console.log("password valid", passwordMatch);
 
           console.log(user);
           if (passwordMatch) {

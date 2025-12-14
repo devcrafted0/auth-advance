@@ -15,17 +15,19 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   const { email, password } = validatedValues.data;
 
   try {
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       email,
       password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
-    if (!result?.ok) {
-      return { error: "Invalid credentials" };
-    }
-    redirect(DEFAULT_LOGIN_REDIRECT);
   } catch (error) {
     if (error instanceof AuthError) {
-      return { error: "Authentication failed" };
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid Credentials !" };
+        default:
+          return { error: "Something went wrong!" };
+      }
     }
     throw error;
   }
