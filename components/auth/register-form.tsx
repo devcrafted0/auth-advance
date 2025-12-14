@@ -64,7 +64,7 @@ export const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="John Doe"
+                      placeholder="Hassan Raza"
                       disabled={isPending}
                     />
                   </FormControl>
@@ -81,7 +81,7 @@ export const RegisterForm = () => {
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="dummy@gmail.com"
+                      placeholder="hassan@gmail.com"
                       type="email"
                       disabled={isPending}
                     />
