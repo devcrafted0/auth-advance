@@ -1,7 +1,9 @@
+import { connectDB } from "@/lib/db";
 import { User } from "@/schemas/User";
 
 export const getUserByEmail = async (email: string) => {
   try {
+    await connectDB();
     const user = await User.findOne({ email });
     return user;
   } catch {
@@ -11,6 +13,7 @@ export const getUserByEmail = async (email: string) => {
 
 export const getUserById = async (id: string) => {
   try {
+    await connectDB();
     const user = await User.findOne({ id });
     return user;
   } catch {
