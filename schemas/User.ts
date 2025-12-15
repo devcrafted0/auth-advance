@@ -7,6 +7,7 @@ export interface IUser {
   password?: string;
   image?: string | null;
   emailVerified: boolean;
+  role: "admin" | "user";
   accounts?: Types.ObjectId[];
 }
 
@@ -38,6 +39,12 @@ const UserSchema = new Schema<IUser>({
   emailVerified: {
     type: Boolean,
     default: false,
+  },
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+    required: true,
   },
   accounts: {
     type: [
