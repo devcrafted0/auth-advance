@@ -1,4 +1,3 @@
-// not using this file currently
 import type { NextAuthConfig } from "next-auth";
 
 export default {

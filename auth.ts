@@ -4,6 +4,12 @@ import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "@/schemas";
 import { getUserByEmail, getUserById } from "@/data/user";
 import bcrypt from "bcryptjs";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+import clientPromise from "@/lib/mongoDb";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import { ObjectId } from "mongodb";
+import { User } from "@/schemas/User";
 
 type ExtendedUser = DefaultSession["user"] & {
   role: "admin" | "user";
@@ -16,7 +22,12 @@ declare module "next-auth" {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: MongoDBAdapter(clientPromise),
   ...authConfig,
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error",
+  },
   providers: [
     Credentials({
       async authorize(credentials) {
@@ -35,6 +46,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         return null;
       },
+    }),
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
     }),
   ],
   callbacks: {
@@ -58,6 +77,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       token.role = existingUser.role;
 
       return token;
+    },
+  },
+  events: {
+    async createUser({ user }) {
+      const client = await clientPromise;
+      const db = client.db();
+
+      await db
+        .collection("users")
+        .updateOne({ _id: new ObjectId(user.id) }, { $set: { role: "user" } });
+    },
+    async linkAccount({ user }) {
+      await User.updateOne(
+        { _id: new ObjectId(user.id) },
+        { $set: { emailVerified: new Date() } }
+      );
     },
   },
 });
