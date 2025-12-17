@@ -9,9 +9,9 @@ export const getVerificationTokenByEmail = async (email: string) => {
   }
 };
 
-export const getVerificationTokenById = async (id: string) => {
+export const getVerificationTokenByToken = async (token: string) => {
   try {
-    const verificationToken = await VerificationToken.findById(id);
+    const verificationToken = await VerificationToken.findOne({ token });
     return verificationToken;
   } catch {
     return null;
