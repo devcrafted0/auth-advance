@@ -1,7 +1,7 @@
 import ErrorAuth from "@/components/auth/error-auth";
 
-const page = () => {
+const Page = () => {
   return <ErrorAuth />;
 };
 
-export default page;
+export default Page;

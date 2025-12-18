@@ -8,7 +8,7 @@ const font = Poppins({
   subsets: ["latin"],
 });
 
-const page = () => {
+const Page = () => {
   return (
     <main className="flex h-full flex-col items-center justify-center bg-sky-400">
       <div className="space-y-6 text-center">
@@ -23,7 +23,7 @@ const page = () => {
 
         <p className="text-white text-xl">A simple authentication service</p>
         <div>
-          <LoginButton>
+          <LoginButton mode="modal" asChild>
             <Button size="lg" variant="secondary" className="cursor-pointer">
               Sign in
             </Button>
@@ -34,4 +34,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
